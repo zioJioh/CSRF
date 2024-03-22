@@ -1,6 +1,7 @@
 package com.CSRF.test;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +26,22 @@ public class MemberController {
         if (memberService.login(account, password)) {
             Cookie cookie = new Cookie("USER_SESSION", account);
             response.addCookie(cookie);
-            return "redirect:/home";
+            return "redirect:/change-password";
         }
         return "redirect:/login?error";
+    }
+
+    @GetMapping("/change-password")
+    public String changePasswordPage() {
+        return "change-password";
+    }
+
+    @PostMapping("/change-password")
+    public String changePassword(HttpServletRequest request, String current_pw, String new_pw, String confirm_pw) {
+        boolean success = memberService.changePassword(request, current_pw, new_pw, confirm_pw);
+        if (success) {
+            return "redirect:/change-password";
+        }
+        return "redirect:/change-password?error";
     }
 }

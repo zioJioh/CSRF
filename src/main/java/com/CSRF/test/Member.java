@@ -23,4 +23,8 @@ public class Member {
     private String account;
 
     private String password;
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

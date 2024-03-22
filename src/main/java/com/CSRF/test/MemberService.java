@@ -1,8 +1,13 @@
 package com.CSRF.test;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
@@ -12,7 +17,30 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public boolean login(String account, String password) {
-        Member member = memberRepository.findByAccount(account);
-        return member != null && member.getPassword().equals(password);
+        return memberRepository.findByAccount(account)
+                .map(member -> member.getPassword().equals(password))
+                .orElse(false);
+    }
+
+    @Transactional
+    public boolean changePassword(HttpServletRequest request, String currentPassword, String newPassword, String confirmPassword) {
+        Cookie[] cookies = request.getCookies();
+        String account = (cookies == null) ? null : Arrays.stream(cookies)
+                .filter(cookie -> "USER_SESSION".equals(cookie.getName()))
+                .findFirst()
+                .map(Cookie::getValue)
+                .orElse(null);
+
+        if (account != null && newPassword.equals(confirmPassword)) {
+            return memberRepository.findByAccount(account)
+                    .filter(member -> member.getPassword().equals(currentPassword))
+                    .map(member -> {
+                        member.setPassword(newPassword);
+                        memberRepository.save(member);
+                        return true;
+                    }).orElse(false);
+        }
+
+        return false;
     }
 }
