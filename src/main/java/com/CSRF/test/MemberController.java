@@ -37,8 +37,8 @@ public class MemberController {
     }
 
     @PostMapping("/change-password")
-    public String changePassword(HttpServletRequest request, String current_pw, String new_pw, String confirm_pw) {
-        boolean success = memberService.changePassword(request, current_pw, new_pw, confirm_pw);
+    public String changePassword(HttpServletRequest request, String new_pw, String confirm_pw) {
+        boolean success = memberService.changePassword(request, new_pw, confirm_pw);
         if (success) {
             return "redirect:/change-password";
         }

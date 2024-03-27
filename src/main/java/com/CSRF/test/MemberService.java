@@ -23,7 +23,8 @@ public class MemberService {
     }
 
     @Transactional
-    public boolean changePassword(HttpServletRequest request, String currentPassword, String newPassword, String confirmPassword) {
+    public boolean changePassword(HttpServletRequest request, String newPassword, String confirmPassword) {
+        //새 pw, pw 확인
         Cookie[] cookies = request.getCookies();
         String account = (cookies == null) ? null : Arrays.stream(cookies)
                 .filter(cookie -> "USER_SESSION".equals(cookie.getName()))
@@ -33,7 +34,6 @@ public class MemberService {
 
         if (account != null && newPassword.equals(confirmPassword)) {
             return memberRepository.findByAccount(account)
-                    .filter(member -> member.getPassword().equals(currentPassword))
                     .map(member -> {
                         member.setPassword(newPassword);
                         memberRepository.save(member);
