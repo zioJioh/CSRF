@@ -21,12 +21,17 @@ public class MemberController {
         return "login";
     }
 
+    @GetMapping("/home")
+    public String homePage(){
+        return "home";
+    }
+
     @PostMapping("/login")
     public String login(String account, String password, HttpServletResponse response) {
         if (memberService.login(account, password)) {
             Cookie cookie = new Cookie("USER_SESSION", account);
             response.addCookie(cookie);
-            return "redirect:/change-password";
+            return "redirect:/home";
         }
         return "redirect:/login?error";
     }
@@ -40,7 +45,7 @@ public class MemberController {
     public String changePassword(HttpServletRequest request, String new_pw, String confirm_pw) {
         boolean success = memberService.changePassword(request, new_pw, confirm_pw);
         if (success) {
-            return "redirect:/change-password";
+            return "redirect:/home";
         }
         return "redirect:/change-password?error";
     }

