@@ -31,7 +31,7 @@ public class MemberController {
         if (memberService.login(account, password)) {
             Cookie cookie = new Cookie("USER_SESSION", account);
             response.addCookie(cookie);
-            return "redirect:/home";
+            return "redirect:/change-password";
         }
         return "redirect:/login?error";
     }

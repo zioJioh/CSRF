@@ -30,6 +30,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+	//아파치시로 의존성
+	implementation 'org.apache.shiro:shiro-core:2.0.0-alpha-3'
+
 	runtimeOnly 'com.h2database:h2'
 }
 
